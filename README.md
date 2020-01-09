@@ -8,7 +8,7 @@ Tasks covered by the created functions:
 * Adding new elements to the inventory
 * Removing elements from the inventory
 * Printing inventory in the form of table
-![Table screenshot](./screenshot1.png)
+* ![Table screenshot](./screenshot1.png)
 * Importing inventory items from the csv file
 * Exporting inventory items to the csv file
 
