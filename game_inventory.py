@@ -1,12 +1,13 @@
 import operator
-# czy funkcje muszą coś zwracać?
+import os.path
+# czy funkcje zawsze muszą coś zwracać?
+# czy zawsze potrzebujemy zamykć pliki jak je otwieramy?
 
 inventory = {
     "dagger": 2,
     "axe": 1,
-    "crossbow": 33
+    "crossbow": 3
 }
-empty_inventory = {}
 
 def display_inventory(inventory):
     """Display the contents of the inventory in a simple way."""
@@ -59,11 +60,10 @@ def set_table_width(inventory, headers):
     return (name_width, count_width)
 
 def print_table(inventory, order="unordered"):
-    """
-    Display the contents of the inventory in an ordered, well-organized table with
+    """Display the contents of the inventory in an ordered, well-organized table with
     each column right-aligned.
-    The "order" parameters can be: "unordered" (default), "count,desc" and "count,asc".
-    """
+    The "order" parameters can be: "unordered" (default), "count,desc" and "count,asc"."""
+
     headers = ("item name", "count")
     inventory_to_print = sort_inventory_items(inventory, order)
     name_width, count_width = set_table_width(inventory_to_print, headers)
@@ -79,37 +79,29 @@ def print_table(inventory, order="unordered"):
     
     print((total_width) * "-")
 
-# Write a function named import_inventory(inventory, filename) which can import new inventory items from a CSV file.
 
-#     The function can handle CSV files containing items in the following format: ruby,rope,ruby,gold coin,ruby,axe
-#     Calling the function with a dictionary and items in a file in comma separated format (e.g. rope, torch, arrow) 
-#     which aren't in the inventory yet results in that the items are added to the inventory as keys and values are set to 1
-#     Calling the function with a dictionary and items in a CSV file which are already in the inventory results in that those 
-#     items' value are incremented by 1
-#     The function could handle if the CSV file contains multiple occurences of the same item, then dictionary values are 
-#     incremented by the number of occurences
-#     If not specified, the filename argument is by default import_inventory.csv
-#     If the file provided in the filename argument cannot be reached on the disk, then the error message 
-#     File '<filename>' not found! is shown on the console output
-
-def import_inventory(inventory, filename):
-    """Import new inventory items from a CSV file."""
-
-    pass
+def import_inventory(inventory, filename="import_inventory.csv"):
+    """Import new inventory items from a CSV file.""" 
+    try:
+        file_to_import = open(filename, "r")
+    except FileNotFoundError:
+        print(f"File '{filename}' not found!")
+    else:
+        file_content = file_to_import.read()
+        elements_to_import = file_content.split(',')
+        add_to_inventory(inventory, elements_to_import)
 
 
-# Write a function named export_inventory(inventory, filename) which can export all inventory items to a CSV file.
-
-#     Calling the function with a non-empty dictionary and a filename argument results in the dictionary keys 
-#     to be saved in CSV format in the file
-#     If there are keys in the dictionary with values greater than 1, then the key is saved into the file as many times 
-#     as the value
-#     If not specified, the filename argument is by default export_inventory.csv
-#     The file denoted in the filename argument is automatically created if not exists, and is overwritten if already exists
-#     If the user executing the function does not have write access in the folder where the script is executed 
-#     then the error message You don't have permission creating file '<filename>'! is shown on the console output
-
-def export_inventory(inventory, filename):
+def export_inventory(inventory, filename="export_inventory.csv"):
     """Export the inventory into a CSV file."""
-
-    pass
+    try:
+        file_to_export_to = open(filename, "w+")
+    except PermissionError:
+        print(f"You don't have permission creating file '{filename}'!")
+    else:
+        list_to_export = []
+        for key, value in inventory.items():
+            for i in range(value):
+                list_to_export.append(key)
+        string_to_export = ",".join(list_to_export)
+        file_to_export_to.write(string_to_export)
