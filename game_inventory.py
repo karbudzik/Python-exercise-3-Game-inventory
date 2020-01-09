@@ -1,13 +1,6 @@
 import operator
 import os.path
-# czy funkcje zawsze muszą coś zwracać?
-# czy zawsze potrzebujemy zamykć pliki jak je otwieramy?
 
-inventory = {
-    "dagger": 2,
-    "axe": 1,
-    "crossbow": 3
-}
 
 def display_inventory(inventory):
     """Display the contents of the inventory in a simple way."""
@@ -59,6 +52,7 @@ def set_table_width(inventory, headers):
 
     return (name_width, count_width)
 
+
 def print_table(inventory, order="unordered"):
     """Display the contents of the inventory in an ordered, well-organized table with
     each column right-aligned.
@@ -90,12 +84,13 @@ def import_inventory(inventory, filename="import_inventory.csv"):
         file_content = file_to_import.read()
         elements_to_import = file_content.split(',')
         add_to_inventory(inventory, elements_to_import)
+        file_to_import.close()
 
 
 def export_inventory(inventory, filename="export_inventory.csv"):
     """Export the inventory into a CSV file."""
     try:
-        file_to_export_to = open(filename, "w+")
+        file_to_export_to = open(filename, "w")
     except PermissionError:
         print(f"You don't have permission creating file '{filename}'!")
     else:
@@ -105,3 +100,4 @@ def export_inventory(inventory, filename="export_inventory.csv"):
                 list_to_export.append(key)
         string_to_export = ",".join(list_to_export)
         file_to_export_to.write(string_to_export)
+        file_to_export_to.close()
